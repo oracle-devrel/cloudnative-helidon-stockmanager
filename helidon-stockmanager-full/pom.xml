@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (c) 2021 Oracle and/or its affiliates.
+
+The Universal Permissive License (UPL), Version 1.0
+
+Subject to the condition set forth below, permission is hereby granted to any
+person obtaining a copy of this software, associated documentation and/or data
+(collectively the "Software"), free of charge and under any and all copyright
+rights in the Software, and any and all patent rights owned or freely
+licensable by each licensor hereunder covering either (i) the unmodified
+Software as contributed to or provided by such licensor, or (ii) the Larger
+Works (as defined below), to deal in both
+
+(a) the Software, and
+(b) any piece of software and/or hardware listed in the lrgrwrks.txt file if
+one is included with the Software (each a "Larger Work" to which the Software
+is contributed by such licensors),
+
+without restriction, including without limitation the rights to copy, create
+derivative works of, display, perform, and distribute the Software and make,
+use, sell, offer for sale, import, export, have made, and have sold the
+Software and the Larger Work(s), and to sublicense the foregoing rights on
+either these or other terms.
+
+This license is subject to the following condition:
+The above copyright notice and either this complete permission notice or at
+a minimum a reference to the UPL must be included in all copies or
+substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE. -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>io.helidon.applications</groupId>
+		<artifactId>helidon-mp</artifactId>
+		<version>2.4.1</version>
+	</parent>
+	<properties>
+		<mainClass>com.oracle.labs.helidon.stockmanager.Main</mainClass>
+		<libs.classpath.prefix>libs</libs.classpath.prefix>
+		<copied.libs.dir>${project.build.directory}/${libs.classpath.prefix}</copied.libs.dir>
+		<ojdbcversion>21.4.0.0.1</ojdbcversion>
+		<maven.compiler.source>17</maven.compiler.source>
+		<maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
+		<version.lombok>1.18.22</version.lombok>
+	</properties>
+	<groupId>com.oracle.labs.helidon</groupId>
+	<artifactId>stockmanager</artifactId>
+	<version>2.3.4</version>
+	<name>${project.artifactId}</name>
+
+	<dependencies>
+		<dependency>
+			<groupId>io.helidon.microprofile.bundles</groupId>
+			<artifactId>helidon-microprofile</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss</groupId>
+			<artifactId>jandex</artifactId>
+			<scope>runtime</scope>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>jakarta.activation</groupId>
+			<artifactId>jakarta.activation-api</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<!-- these let us use MP annotations and Injection to setup the database 
+			connection Note that the persistence.xml file specifies the use of helidon 
+			and MySQL -->
+		<dependency>
+			<groupId>io.helidon.integrations.cdi</groupId>
+			<artifactId>helidon-integrations-cdi-datasource-hikaricp</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<!-- The basic Java Transactions CDI support -->
+		<dependency>
+			<groupId>io.helidon.integrations.cdi</groupId>
+			<artifactId>helidon-integrations-cdi-jta-weld</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.helidon.integrations.cdi</groupId>
+			<artifactId>helidon-integrations-cdi-jpa</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<!-- Hibernate is a DB generic JPA layer, this is the Helidon connection 
+			to it -->
+		<dependency>
+			<groupId>io.helidon.integrations.cdi</groupId>
+			<artifactId>helidon-integrations-cdi-hibernate</artifactId>
+		</dependency>
+		<!-- Hibernate is a DB generic JPA layer, this is the Helidon connection 
+			the integration brings in the appropriate hibernate version for the integration, 
+			so we don;t need to -->
+		<dependency>
+			<groupId>io.helidon.integrations.cdi</groupId>
+			<artifactId>helidon-integrations-cdi-hibernate</artifactId>
+		</dependency>
+		<!-- EclipseLink is also a generic JPA layer, that sids on the drivers, 
+			to use this you's also need the EclipseLink dependencies as well, this is 
+			just here to show you the Helidon part you'd use if you did use eclipse link -->
+		<!-- <dependency> <groupId>io.helidon.integrations.cdi</groupId> <artifactId>helidon-integrations-cdi-eclipselink</artifactId> 
+			</dependency> -->
+		<!-- These define the basic persistence and transaction abilities -->
+		<dependency>
+			<groupId>jakarta.persistence</groupId>
+			<artifactId>jakarta.persistence-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<!-- Sadly this is not automatically included by the Jakarta persistance 
+			library, ho-hum -->
+		<dependency>
+			<groupId>javax.persistence</groupId>
+			<artifactId>javax.persistence-api</artifactId>
+			<version>2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.transaction</groupId>
+			<artifactId>javax.transaction-api</artifactId>
+			<version>1.2</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- database JDBC connections, These two bring in MySQL and hibernate, 
+			MySQL is the database driver, hibernate is the JPA driver -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<scope>runtime</scope>
+			<!-- <version>8.0.17</version> -->
+		</dependency>
+		<!-- Oracle JDBC Drivers from Maven.org -->
+		<dependency>
+			<groupId>com.oracle.database.jdbc</groupId>
+			<artifactId>ojdbc11</artifactId>
+			<version>${ojdbcversion}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.oracle.database.jdbc</groupId>
+			<artifactId>ucp</artifactId>
+			<!-- <version>${ojdbcversion}</version>-->
+			<scope>runtime</scope>
+		</dependency>
+		<!-- For Oracle Wallet, get the oraclepki, osdt_core and osdt_cert artifacts -->
+		<dependency>
+			<groupId>com.oracle.database.security</groupId>
+			<artifactId>oraclepki</artifactId>
+			<!-- <version>${ojdbcversion}</version>-->
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.oracle.database.security</groupId>
+			<artifactId>osdt_core</artifactId>
+			<!-- <version>${ojdbcversion}</version>-->
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.oracle.database.security</groupId>
+			<artifactId>osdt_cert</artifactId>
+			<!-- <version>${ojdbcversion}</version>-->
+			<scope>runtime</scope>
+		</dependency>
+
+		<!-- ATP-D furnishes built-in high availability, you also need to get the 
+			ons and oraclepki artifacts for the HA events notification (even if you are 
+			using Java KeyStore) -->
+		<dependency>
+			<groupId>com.oracle.database.ha</groupId>
+			<artifactId>ons</artifactId>
+			<!-- <version>${ojdbcversion}</version>-->
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.oracle.database.security</groupId>
+			<artifactId>oraclepki</artifactId>
+			<!-- <version>${ojdbcversion}</version>-->
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.helidon.integrations.cdi</groupId>
+			<artifactId>helidon-integrations-cdi-hibernate</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<!-- Utilities -->
+		<!-- Lombok does the auto method creation -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>${version.lombok}</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- SLF4J is a logging facade that let's us change the actual logger used 
+			under the covers without changing our code, slf4j-jdk14 is for output to 
+			the standard Java logging utilities. By making the dependency declaration 
+			below Maven will bring in the core SLF4J jar files, and also the SLJ4J to 
+			java.util.logging binding. If the artifact is changed to slf4j-log4j12 then 
+			maven will bring in the SLF4J to log4j binding instead This is commented 
+			out because Helidon itself brings in slf4j, but if you were using a different 
+			version case then you'd need to specify it yourself, to this is here as a 
+			placeholder / reminder -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-jdk14</artifactId>
+		</dependency>
+
+		
+		<!-- tracing calls -->
+		<!-- <dependency> <groupId>io.helidon.tracing</groupId> <artifactId>helidon-tracing-zipkin</artifactId> 
+			</dependency> -->
+	</dependencies>
+
+	<build>
+		<plugins>
+			<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-dependency-plugin</artifactId> 
+				<executions> <execution> <id>copy-dependencies</id> <phase>prepare-package</phase> 
+				<goals> <goal>copy-dependencies</goal> </goals> <configuration> <outputDirectory>${copied.libs.dir}</outputDirectory> 
+				<overWriteReleases>false</overWriteReleases> <overWriteSnapshots>false</overWriteSnapshots> 
+				<overWriteIfNewer>true</overWriteIfNewer> <overWriteIfNewer>true</overWriteIfNewer> 
+				<includeScope>runtime</includeScope> <excludeScope>test</excludeScope> </configuration> 
+				</execution> </executions> </plugin> -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-libs</id>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.jboss.jandex</groupId>
+				<artifactId>jandex-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>make-index</id>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>com.google.cloud.tools</groupId>
+				<artifactId>jib-maven-plugin</artifactId>
+				<version>3.1.4</version>
+				<configuration>
+					<!-- Use the Graal community edition image as it's got better JIT compiler, 
+						it uses a bigger base than the distroless java jib uses by defautso we can 
+						actually connect to it to fix some of the problems when jib puts things like 
+						the jandex.idx file in /resources/META-INF which CDI and WELD can't handle, 
+						the distroless base is only java, and we need a shell to run things like 
+						cp and rm. Alpine jre only is a lot smaller than the full openjdk:8 image, 
+						but does support cp and rm, however it doesn't have all of the Unix type 
+						tools in it, so if some are missing go for openjdk:8 here -->
+					<from>
+						<!-- <image>openjdk:11-jre-alpine</image> -->
+						<!-- <image>openjdk:11-jre-slim</image> -->
+						<image>openjdk:17.0.1-jdk</image>
+						<!--<image>ghcr.io/graalvm/graalvm-ce:java17-21</image>-->
+					</from>
+					<to>
+						<image>jib-${project.artifactId}</image>
+						<tags>
+							<tag>${project.version}</tag>
+							<tag>latest</tag>
+						</tags>
+					</to>
+					<container>
+						<!-- good defaults intended for containers -->
+						<jvmFlags>
+							<jmxFlag>-server</jmxFlag>
+							<jmxFlag>-Djava.awt.headless=true</jmxFlag>
+							<jmxFlag>-XX:+UnlockExperimentalVMOptions</jmxFlag>
+							<jmxFlag>-XX:+UseG1GC</jmxFlag>
+						</jvmFlags>
+						<mainClass>${mainClass}</mainClass>
+						<ports>
+							<port>8081</port>
+							<port>9081</port>
+						</ports>
+						<volumes>
+							<volume>/conf</volume>
+							<volume>/confsecure</volume>
+							<volume>/Wallet_ATP</volume>
+						</volumes>
+					</container>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>dockerBuild</goal>
+						</goals>
+						<phase>package</phase>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.jboss.jandex
+										</groupId>
+										<artifactId>
+											jandex-maven-plugin
+										</artifactId>
+										<versionRange>
+											[1.0.1,)
+										</versionRange>
+										<goals>
+											<goal>jandex</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+</project>
