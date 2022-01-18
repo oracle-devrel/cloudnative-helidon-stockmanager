@@ -31,3 +31,9 @@ Temporary Items
 .crt
 .csr
 .pem
+
+#Project ignores
+ObjectStore
+PutObjectStoreDirHere
+target
+Wallet_ATP
