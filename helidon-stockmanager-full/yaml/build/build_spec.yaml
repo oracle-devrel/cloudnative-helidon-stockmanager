@@ -62,16 +62,17 @@ steps:
         runAs: root
 
   - type: Command
-    name: "Install local JDK11"
+    name: "Install local JDK17"
     timeoutInSeconds: 10000
     command: |
       cd ~
       mkdir InstalledSoftware
       cd InstalledSoftware
-      wget -q https://download.java.net/openjdk/jdk11/ri/openjdk-11+28_linux-x64_bin.tar.gz
-      tar -xf openjdk-11+28_linux-x64_bin.tar.gz
+      wget -q https://download.oracle.com/java/17/latest/jdk-17_linux-x64_bin.tar.gz
+      tar xf *tar.gz
+      rm *tar.gz
       ls -l
-      export JAVA_HOME=~/InstalledSoftware/jdk-11
+      export JAVA_HOME=`echo -n ~/InstalledSoftware/jdk-*`
       export PATH=$JAVA_HOME/bin:$PATH
       echo Path is
       echo $PATH
@@ -97,7 +98,7 @@ steps:
       echo OCIR_HOST is $OCIR_HOST
       echo OCIR_STORAGE_NAMEPACE is $OCIR_STORAGE_NAMEPACE
       echo OCI_PRIMARY_SOURCE_DIR is ${OCI_PRIMARY_SOURCE_DIR}
-      echo This is the Java version, it should be Java 11
+      echo This is the Java version, it should be Java 17
       java -version
       echo This is the maven version
       mvn -v 
