@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: stockmanager
-        image: ${OCIR_HOST}/${OCIR_STORAGE_NAMESPACE}/${YOUR_INITIALS}/storefront:${STOCKMANAGER_VERSION}
+        image: ${OCIR_HOST}/${OCIR_STORAGE_NAMESPACE}/${YOUR_INITIALS}devops/stockmanager:${STOCKMANAGER_VERSION}
         imagePullPolicy: IfNotPresent 
         ports:
         - name: service-port
