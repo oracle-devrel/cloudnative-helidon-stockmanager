@@ -28,7 +28,7 @@ env:
   # We want to transfer over the vault values in this case, so create a variable to hold them
   # and we will copy them over
   exportedVariables:
-    - STOREFRONT_VERSION
+    - STOCKMANAGER_VERSION
     - OCIR_HOST
     - OCIR_STORAGE_NAMESPACE
 
@@ -44,14 +44,14 @@ steps:
       echo $JAVA_HOME
       cd ${OCI_PRIMARY_SOURCE_DIR}
       echo Extracting export variables - Working in `pwd`
-      export STOREFRONT_VERSION=`grep "VERSION = " helidon-storefront-full/src/main/java/com/oracle/labs/helidon/storefront/resources/StatusResource.java  | awk '{print $7}' | sed -e 's/"//g' -e s'/;//'`
-      echo "STOREFRONT_VERSION: " $STOREFRONT_VERSION
+      export STOCKMANAGER_VERSION=`grep "VERSION = " helidon-stockmanager-full/src/main/java/com/oracle/labs/helidon/stockmanager/resources/StatusResource.java  | awk '{print $7}' | sed -e 's/"//g' -e s'/;//'`
+      echo "STOCKMANAGER_VERSION: " $STOCKMANAGER_VERSION
       echo transferring the OCIR_HOST and OCIR_STORAGE_NAMESPACE vault variables
       export OCIR_HOST=$OCIR_HOST_VAULT
       echo OCIR_HOST is $OCIR_HOST
       export OCIR_STORAGE_NAMESPACE=$OCIR_STORAGE_NAMESPACE_VAULT
       echo OCIR_STORAGE_NAMESPACE is $OCIR_STORAGE_NAMESPACE
-      echo image will be stored to ${OCIR_HOST}/${OCIR_STORAGE_NAMEPACE}/${YOUR_INITIALS}/storefront:${STOREFRONT_VERSION}
+      echo image will be stored to ${OCIR_HOST}/${OCIR_STORAGE_NAMEPACE}/${YOUR_INITIALS}devops/stockmanager:${STOCKMANAGER_VERSION}
     onFailure:
       - type: Command
         timeoutInSeconds: 40
@@ -94,7 +94,7 @@ steps:
     command: |
       echo PATH is $PATH
       echo JAVA_HOME is $JAVA_HOME
-      echo STOREFRONT_VERSION is $STOREFRONT_VERSION
+      echo STOCKMANAGER_VERSION is $STOCKMANAGER_VERSION
       echo OCIR_HOST is $OCIR_HOST
       echo OCIR_STORAGE_NAMEPACE is $OCIR_STORAGE_NAMEPACE
       echo OCI_PRIMARY_SOURCE_DIR is ${OCI_PRIMARY_SOURCE_DIR}
@@ -115,7 +115,7 @@ steps:
     name: "Build Source and pack into container image"
     timeoutInSeconds: 400
     command: |
-      cd ${OCI_PRIMARY_SOURCE_DIR}/helidon-storefront-full
+      cd ${OCI_PRIMARY_SOURCE_DIR}/helidon-stockmanager-full
       echo Running maven package - Working in `pwd`
       mvn package  
       docker images
@@ -124,24 +124,24 @@ steps:
     name: "Fix resources location in container image"
     timeoutInSeconds: 60
     command: |
-      cd ${OCI_PRIMARY_SOURCE_DIR}/helidon-storefront-full
+      cd ${OCI_PRIMARY_SOURCE_DIR}/helidon-stockmanager-full
       echo Running docker update - Working in `pwd`
-      docker build  --tag storefront:latest --file Dockerfile . 
+      docker build  --tag stockmanager:latest --file Dockerfile . 
       echo images are
       docker images
      
      
 # This basically preserves and "names" the artifacts below (if it's not here it gets junked) so the deliver artifact stage can handle them
 outputArtifacts:
-  - name: storefront_container_image
+  - name: stockmanager_container_image
     type: DOCKER_IMAGE
-    location: storefront:latest
+    location: stockmanager:latest
   - name: service_yaml
     type: BINARY
-    location: ${OCI_PRIMARY_SOURCE_DIR}/helidon-storefront-full/yaml/deployment/serviceStorefront.yaml
+    location: ${OCI_PRIMARY_SOURCE_DIR}/helidon-stockmanager-full/yaml/deployment/serviceStorefront.yaml
   - name: ingressRules_yaml
     type: BINARY
-    location: ${OCI_PRIMARY_SOURCE_DIR}/helidon-storefront-full/yaml/deployment/ingressStorefrontRules.yaml
+    location: ${OCI_PRIMARY_SOURCE_DIR}/helidon-stockmanager-full/yaml/deployment/ingressStorefrontRules.yaml
   - name: deployment_yaml
     type: BINARY
-    location: ${OCI_PRIMARY_SOURCE_DIR}/helidon-storefront-full/yaml/deployment/storefront-deployment.yaml
+    location: ${OCI_PRIMARY_SOURCE_DIR}/helidon-stockmanager-full/yaml/deployment/stockmanager-deployment.yaml
