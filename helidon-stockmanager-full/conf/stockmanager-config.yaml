@@ -1,0 +1,10 @@
+app:
+  persistenceUnit: "stockmanagerJTA"
+  department: "My Shop"
+  
+errorgenerationrate: "0.5"
+  
+#tracing:
+#  service: "stockmanager"
+#  host: "zipkin"
+ 
