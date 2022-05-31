@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <!-- Copyright (c) 2021 Oracle and/or its affiliates.
 
 The Universal Permissive License (UPL), Version 1.0
@@ -52,7 +53,7 @@ SOFTWARE. -->
 		<version.lombok>1.18.24</version.lombok>
 		<version.jib>3.2.1</version.jib>
 		<sonar.skip>true</sonar.skip>
-		<container.image>ghcr.io/graalvm/graalvm-ce:java17-21</container.image>
+		<container.image>ghcr.io/graalvm/graalvm-ce:java17-22</container.image>
 	</properties>
 	<groupId>com.oracle.labs.helidon</groupId>
 	<artifactId>stockmanager</artifactId>
