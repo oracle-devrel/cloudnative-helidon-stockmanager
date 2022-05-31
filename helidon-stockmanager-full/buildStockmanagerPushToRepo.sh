@@ -34,7 +34,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 . ./repoStockmanagerConfig.sh
-mvn package
+mvn clean package
 docker build --tag $REPO:latest --tag $REPO:0.0.1  --file Dockerfile .
 docker push $REPO:latest
 docker push $REPO:0.0.1
