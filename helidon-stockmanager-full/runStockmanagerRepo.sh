@@ -35,7 +35,7 @@
 # SOFTWARE.
 . ./repoStockmanagerConfig.sh
 RUNDIR=`pwd`
-CONTAINER_DIR=
+CONTAINER_DIR=/app
 echo extracting from $RUNDIR
 export CONF=$RUNDIR/conf
 export CONFSECURE=$RUNDIR/confsecure
