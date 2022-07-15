@@ -57,7 +57,7 @@ SOFTWARE. -->
 	</properties>
 	<groupId>com.oracle.labs.helidon</groupId>
 	<artifactId>stockmanager</artifactId>
-	<version>${parent.version}</version>
+	<version>${project.parent.version}</version>
 	<name>${project.artifactId}</name>
 
 	<dependencies>
