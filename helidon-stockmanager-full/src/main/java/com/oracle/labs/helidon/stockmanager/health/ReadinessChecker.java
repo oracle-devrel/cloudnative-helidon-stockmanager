@@ -36,8 +36,6 @@ SOFTWARE.
  */
 package com.oracle.labs.helidon.stockmanager.health;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -49,6 +47,9 @@ import org.eclipse.microprofile.health.Readiness;
 import com.oracle.labs.helidon.stockmanager.database.StockId;
 import com.oracle.labs.helidon.stockmanager.database.StockLevel;
 import com.oracle.labs.helidon.stockmanager.providers.DepartmentProvider;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 /**
  * Readiness is different form Liveness. Readiness ensures that we actually are
@@ -81,12 +82,12 @@ public class ReadinessChecker implements HealthCheck {
 			// if it returns without an exception it mean's we're good
 			entityManager.find(StockLevel.class, new StockId("Bad Department", "Bad Item"));
 		} catch (Exception e) {
-			return HealthCheckResponse.named("stockmanager-ready").state(false)
+			return HealthCheckResponse.named("stockmanager-ready").down()
 					.withData("department", departmentProvider.getDepartment())
 					.withData("persistanceUnit", persistenceUnit).withData("Exception", e.getClass().getName())
 					.withData("Exception message", e.getMessage()).build();
 		}
-		return HealthCheckResponse.named("stockmanager-ready").state(true)
+		return HealthCheckResponse.named("stockmanager-ready").up()
 				.withData("department", departmentProvider.getDepartment()).withData("persistanceUnit", persistenceUnit)
 				.build();
 	}

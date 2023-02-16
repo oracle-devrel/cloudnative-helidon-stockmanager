@@ -36,15 +36,15 @@ SOFTWARE.
  */
 package com.oracle.labs.helidon.stockmanager.health;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.health.HealthCheck;
 import org.eclipse.microprofile.health.HealthCheckResponse;
 import org.eclipse.microprofile.health.Liveness;
 
 import com.oracle.labs.helidon.stockmanager.providers.DepartmentProvider;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 /**
  * Readiness is different form Liveness. Readiness ensures that we actually are
