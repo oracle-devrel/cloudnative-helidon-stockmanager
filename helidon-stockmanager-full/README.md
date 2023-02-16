@@ -89,3 +89,14 @@ kubectl get pods                             # Verify connectivity to cluster
 kubectl create -f app.yaml               # Deploy application
 kubectl get service helidon-labs-stockmanager  # Verify deployed service
 ```
+
+
+
+## Disclaimer
+
+ORACLE AND ITS AFFILIATES DO NOT PROVIDE ANY WARRANTY WHATSOEVER, EXPRESS OR IMPLIED, FOR ANY SOFTWARE, MATERIAL OR CONTENT OF ANY KIND
+
+## Copyright
+
+Copyright (c) 2023 Oracle and/or its affiliates. All rights reserved.
+The Universal Permissive License (UPL), Version 1.0
