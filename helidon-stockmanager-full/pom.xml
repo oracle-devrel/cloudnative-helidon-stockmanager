@@ -37,12 +37,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion><parent>
-        <groupId>io.helidon.applications</groupId>
-        <artifactId>helidon-mp</artifactId>
-        <version>3.1.1</version>
-        <relativePath/>
-    </parent>
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>io.helidon.applications</groupId>
+		<artifactId>helidon-mp</artifactId>
+		<version>3.1.1</version>
+		<relativePath />
+	</parent>
 	<properties>
 		<mainClass>com.oracle.labs.helidon.stockmanager.Main</mainClass>
 		<libs.classpath.prefix>libs</libs.classpath.prefix>
@@ -101,14 +102,8 @@ SOFTWARE. -->
 			<scope>runtime</scope>
 		</dependency>
 		<!-- Hibernate is a DB generic JPA layer, this is the Helidon connection 
-			to it -->
-		<dependency>
-			<groupId>io.helidon.integrations.cdi</groupId>
-			<artifactId>helidon-integrations-cdi-hibernate</artifactId>
-		</dependency>
-		<!-- Hibernate is a DB generic JPA layer, this is the Helidon connection 
 			the integration brings in the appropriate hibernate version for the integration, 
-			so we don;t need to -->
+			so we don't need to -->
 		<dependency>
 			<groupId>io.helidon.integrations.cdi</groupId>
 			<artifactId>helidon-integrations-cdi-hibernate</artifactId>
@@ -122,20 +117,18 @@ SOFTWARE. -->
 		<dependency>
 			<groupId>jakarta.persistence</groupId>
 			<artifactId>jakarta.persistence-api</artifactId>
-			<scope>provided</scope>
+			<!--<scope>provided</scope>-->
 		</dependency>
 		<!-- Sadly this is not automatically included by the Jakarta persistance 
 			library, ho-hum -->
 		<dependency>
-			<groupId>javax.persistence</groupId>
-			<artifactId>javax.persistence-api</artifactId>
-			<version>2.2</version>
+			<groupId>jakarta.persistence</groupId>
+			<artifactId>jakarta.persistence-api</artifactId>
+			<version>3.0.0</version>
 		</dependency>
 		<dependency>
-			<groupId>javax.transaction</groupId>
-			<artifactId>javax.transaction-api</artifactId>
-			<version>1.2</version>
-			<scope>provided</scope>
+			<groupId>jakarta.transaction</groupId>
+			<artifactId>jakarta.transaction-api</artifactId>
 		</dependency>
 		<!-- database JDBC connections, These two bring in MySQL and hibernate, 
 			MySQL is the database driver, hibernate is the JPA driver -->
@@ -149,7 +142,6 @@ SOFTWARE. -->
 		<dependency>
 			<groupId>com.oracle.database.jdbc</groupId>
 			<artifactId>ojdbc11</artifactId>
-			<version>${ojdbcversion}</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
@@ -201,15 +193,22 @@ SOFTWARE. -->
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
+			<groupId>org.hibernate.validator</groupId>
+			<artifactId>hibernate-validator</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish</groupId>
+			<artifactId>jakarta.el</artifactId>
+		</dependency>
+		<!--<dependency>
 			<groupId>javax.transaction</groupId>
 			<artifactId>jta</artifactId>
 			<version>1.1</version>
-		</dependency>
-		<dependency>
-			<groupId>javax.transaction</groupId>
-			<artifactId>javax.transaction-api</artifactId>
-			<version>1.2</version>
-		</dependency>
+		</dependency>-->
+		<!--<dependency>
+			<groupId>jakarta.transaction</groupId>
+			<artifactId>jakarta.transaction-api</artifactId>
+		</dependency>-->
 		<!-- not quite sure why it fails to run withouh this entry, given this package is imported elsewhere, 
           but it seems to fail if this isn't present on my system at least -->
 		<dependency>
@@ -240,8 +239,10 @@ SOFTWARE. -->
 
 
 		<!-- tracing calls -->
-		<dependency> <groupId>io.helidon.tracing</groupId> <artifactId>helidon-tracing-zipkin</artifactId> 
-			</dependency> 
+		<dependency>
+			<groupId>io.helidon.tracing</groupId>
+			<artifactId>helidon-tracing-zipkin</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>

@@ -36,9 +36,6 @@ SOFTWARE.
  */
 package com.oracle.labs.helidon.stockmanager.health;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.health.HealthCheck;
 import org.eclipse.microprofile.health.HealthCheckResponse;
@@ -50,6 +47,8 @@ import com.oracle.labs.helidon.stockmanager.providers.DepartmentProvider;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
 /**
  * Readiness is different form Liveness. Readiness ensures that we actually are
