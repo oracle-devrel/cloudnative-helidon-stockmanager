@@ -124,11 +124,6 @@ SOFTWARE. -->
 		<dependency>
 			<groupId>jakarta.persistence</groupId>
 			<artifactId>jakarta.persistence-api</artifactId>
-			<version>3.0.0</version>
-		</dependency>
-		<dependency>
-			<groupId>jakarta.transaction</groupId>
-			<artifactId>jakarta.transaction-api</artifactId>
 		</dependency>
 		<!-- database JDBC connections, These two bring in MySQL and hibernate, 
 			MySQL is the database driver, hibernate is the JPA driver -->
