@@ -41,7 +41,7 @@ SOFTWARE. -->
 	<parent>
 		<groupId>io.helidon.applications</groupId>
 		<artifactId>helidon-mp</artifactId>
-		<version>3.1.2</version>
+		<version>3.2.12</version>
 		<relativePath />
 	</parent>
 	<properties>
@@ -49,12 +49,12 @@ SOFTWARE. -->
 		<libs.classpath.prefix>libs</libs.classpath.prefix>
 		<copied.libs.dir>${project.build.directory}/${libs.classpath.prefix}</copied.libs.dir>
 		<ojdbcversion>21.4.0.0.1</ojdbcversion>
-		<maven.compiler.source>21</maven.compiler.source>
+		<maven.compiler.source>17</maven.compiler.source>
 		<maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
 		<version.lombok>1.18.36</version.lombok>
 		<version.jib>3.3.1</version.jib>
 		<sonar.skip>true</sonar.skip>
-		<container.image>ghcr.io/graalvm/jdk-community:21</container.image>
+		<container.image>ghcr.io/graalvm/jdk-community:17</container.image>
 	</properties>
 	<groupId>com.oracle.labs.helidon</groupId>
 	<artifactId>stockmanager</artifactId>
@@ -124,12 +124,13 @@ SOFTWARE. -->
 		</dependency>
 		<!-- database JDBC connections, These two bring in MySQL and hibernate, 
 			MySQL is the database driver, hibernate is the JPA driver -->
+		<!-- no longer using mysql for this, at least for now
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<scope>runtime</scope>
-			<!-- <version>8.0.17</version> -->
-		</dependency>
+			<version>8.0.17</version>
+		</dependency>-->
 		<!-- Oracle JDBC Drivers from Maven.org -->
 		<dependency>
 			<groupId>com.oracle.database.jdbc</groupId>
